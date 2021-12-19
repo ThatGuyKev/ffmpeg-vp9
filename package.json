@@ -1,0 +1,28 @@
+{
+  "name": "ffmpeg-vp9",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Ahmed Abdalla",
+    "email": "ahmed_aallah@hotmail.com",
+    "url": "thatguykev.ninja"
+  },
+  "dependencies": {
+    "shelljs": "^0.8.4",
+    "string-template": "^1.0.0",
+    "tsconfig-paths": "^3.12.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.2.6",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.4",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "scripts": {
+    "watch": "ts-node-dev -r tsconfig-paths/register --respawn index.dev.ts",
+    "build": "webpack --progress"
+  }
+}
