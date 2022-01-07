@@ -47,7 +47,6 @@ export const encodeVP9: EncodeVP9I = async (file, fileName, scales) => {
                     scale: s.resolution,
                     bitRate: s.bitRate
                 }
-
                 let command = format(FFMPEG_VIDEO, args)
                  await exec(command);
                 if (i + 1 == scales.length) {
