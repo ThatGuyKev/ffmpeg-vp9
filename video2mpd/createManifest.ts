@@ -10,7 +10,7 @@ const FFMPEG_BIN = shell.which('ffmpeg');
 
 const MANIFEST_BASE = FFMPEG_BIN + ` \
 {vids} \
--f webm_dash_manifest -i output/{fileName}/audio.webm  \
+-f webm_dash_manifest -i ~/s3-bucket/{fileName}/audio.webm  \
 -c copy \
 {maps} \
 -f webm_dash_manifest \
@@ -25,7 +25,7 @@ export const createManifest: CreateManifestI = async (fileName, scales) => {
     try {
         const args = {
             fileName,
-            output: `output/${fileName}/${fileName}.mpd`,
+            output: `~/s3-bucket/${fileName}/${fileName}.mpd`,
             vids: getVids(fileName, scales),
             maps: getMaps(scales),
             sets: getSets(scales)

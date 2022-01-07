@@ -26,36 +26,47 @@ const FFMPEG_VIDEO = FFMPEG_BIN + ` \
 
 const FFMPEG_AUDIO = FFMPEG_BIN + ` \
 -hide_banner -i {input} -c:a libvorbis -b:a 192k -vn \
--f webm -dash 1 output/{fileName}/audio.webm`
+-f webm -dash 1 ~/s3-bucket/{fileName}/audio.webm`
 
 const SPEED = 4
-const MKDIR = `cd output && mkdir {fileName} && cd ..`
+const MKDIR = `cd ~/s3-bucket && mkdir {fileName} && cd ..`
 
 export const encodeVP9: EncodeVP9I = async (file, fileName, scales) => {
     console.log(`FFmpeg pass 1:`, FFMPEG_LOG);
     try {
         await exec(format(MKDIR, { fileName }));
-        return new Promise((resolve, reject) => {
-            scales.forEach(async (s, i) => {
-                let scale = s.resolution.split(":").join("x")
-                let args = {
-                    input: `input/${file}`,
-                    fileName,
-                    rate: s.rate,
-                    speed: SPEED,
-                    output: `output/${fileName}/${scale}-${s.rate}-${s.bitRate}k.webm`,
-                    scale: s.resolution,
-                    bitRate: s.bitRate
-                }
-                let command = format(FFMPEG_VIDEO, args)
-                 await exec(command);
-                if (i + 1 == scales.length) {
+        let promises = []
+        scales.forEach((s, i) => {
+            console.log("Position: ", i + 1, ", ", scales.length)
+            let scale = s.resolution.split(":").join("x")
+            let args = {
+                input: `${file}`,
+                fileName,
+                rate: s.rate,
+                speed: SPEED,
+                output: `~/s3-bucket/${fileName}/${scale}-${s.rate}-${s.bitRate}k.webm`,
+                scale: s.resolution,
+                bitRate: s.bitRate
+            }
+            let command = format(FFMPEG_VIDEO, args)
+            promises.push(exec(command, (err, stdout, stderr) => {
+                console.log("Error: ", err)
+                console.log("stdout: ", stdout)
+                console.log("stderr: ", stderr)
+            }));
+            if (i + 1 == scales.length) {
                 let command = format(FFMPEG_AUDIO, args)
-                let result = await exec(command);
-                    resolve(result ? true : false)
-                }
-            })
+                promises.push(exec(command, (err, stdout, stderr) => {
+                    console.log("Error: ", err)
+                    console.log("stdout: ", stdout)
+                    console.log("stderr: ", stderr)
+                }));
+
+            }
         })
+        let results = await Promise.all(promises)
+        return results ? true : false
+
     }
     catch (error) {
         throw new Error(error)
