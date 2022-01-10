@@ -14,6 +14,8 @@
     "tsconfig-paths": "^3.12.0"
   },
   "devDependencies": {
+    "@types/shelljs": "^0.8.10",
+    "@types/string-template": "^1.0.2",
     "ts-loader": "^9.2.6",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.4",

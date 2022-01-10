@@ -29,8 +29,14 @@ export default class Video2mpd implements Video2mpdI {
     }
 
     async encode() {
-        const encoded = await encodeVP9(this.file, this.fileName, this.scales)
-        return encoded
+        try {
+            const encoded = await encodeVP9(this.file, this.fileName, this.scales)
+          console.log("Encoded: ", encoded)
+            return encoded
+        } catch (e) {
+            console.error(e);
+
+        }
     }
 
     async createManifest() {

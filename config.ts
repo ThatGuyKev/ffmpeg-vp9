@@ -11,11 +11,11 @@ export const scales:Scales = [
         rate: 30,
         bitRate: 1600
     },
-    {
-        resolution: "1280:720",
-        rate: 30,
-        bitRate: 3200
-    },
+    // {
+    //     resolution: "1280:720",
+    //     rate: 30,
+    //     bitRate: 3200
+    // },
     // {
     //     scale: "1280:720",
     //     rate: 60,
