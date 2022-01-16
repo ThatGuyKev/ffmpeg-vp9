@@ -2,7 +2,7 @@ import { GetMapsI, GetSetsI, GetVidsI } from "./types"
 
 export const getVids: GetVidsI = (fileName, scales) => {
     return scales.reduce((a, c) => a + ` \
-    -f webm_dash_manifest -i ~/s3-bucket/${fileName}/${c.resolution.split(':').join("x")}-${c.rate}-${c.bitRate}k.webm `
+    -f webm_dash_manifest -i /tmp/winggo-vod/${fileName}/${c.resolution.split(':').join("x")}-${c.rate}-${c.bitRate}k.webm `
         , "")
 }
 export const getMaps: GetMapsI = (scales) => {

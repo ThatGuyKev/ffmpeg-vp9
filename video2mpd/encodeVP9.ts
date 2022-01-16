@@ -1,11 +1,10 @@
 import { EncodeVP9I } from "./types"
-
-const util = require('util')
+import util from 'util'
 const exec = util.promisify(require('child_process').exec)
-const format = require('string-template')
-const shell = require('shelljs')
-const path = require('path')
-const os = require('os')
+import format from 'string-template'
+import shell from 'shelljs'
+import path from 'path'
+import os from 'os'
 
 
 const FFMPEG_BIN = shell.which('ffmpeg');
@@ -26,16 +25,16 @@ const FFMPEG_VIDEO = FFMPEG_BIN + ` \
 
 const FFMPEG_AUDIO = FFMPEG_BIN + ` \
 -hide_banner -i {input} -c:a libvorbis -b:a 192k -vn \
--f webm -dash 1 ~/s3-bucket/{fileName}/audio.webm`
+-f webm -dash 1 /tmp/winggo-vod/{fileName}/audio.webm`
 
 const SPEED = 3
-const MKDIR = `cd ~/s3-bucket && mkdir {fileName}`
+const MKDIR = `cd /tmp && cd winggo-vod && mkdir {fileName}`
 
 export const encodeVP9: EncodeVP9I = async (file, fileName, scales) => {
     console.log(`FFmpeg pass 1:`, FFMPEG_LOG);
     try {
         await exec(format(MKDIR, { fileName }));
-        
+
         let promises = []
         let command = format(FFMPEG_AUDIO, { input: file, fileName })
 
@@ -50,7 +49,7 @@ export const encodeVP9: EncodeVP9I = async (file, fileName, scales) => {
                 fileName,
                 rate: s.rate,
                 speed: SPEED,
-                output: `~/s3-bucket/${fileName}/${scale}-${s.rate}-${s.bitRate}k.webm`,
+                output: `/tmp/winggo-vod/${fileName}/${scale}-${s.rate}-${s.bitRate}k.webm`,
                 scale: s.resolution,
                 bitRate: s.bitRate
             }

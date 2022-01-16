@@ -10,7 +10,7 @@ const FFMPEG_BIN = shell.which('ffmpeg');
 
 const MANIFEST_BASE = FFMPEG_BIN + ` \
 {vids} \
--f webm_dash_manifest -i ~/s3-bucket/{fileName}/audio.webm  \
+-f webm_dash_manifest -i /tmp/winggo-vod/{fileName}/audio.webm  \
 {maps} \
 -c copy \
 -f webm_dash_manifest \
@@ -25,11 +25,11 @@ export const createManifest: CreateManifestI = async (fileName, scales) => {
 
     try {
         // Change permissions
-        const CHANGE_PERMISSIONS = `cd ~/s3-bucket && chmod -R a+x ${fileName}`
+        // const CHANGE_PERMISSIONS = `cd ~/s3-bucket && chmod -R a+x ${fileName}`
         // const permissions = await exec(CHANGE_PERMISSIONS)
         const args = {
             fileName,
-            output: `~/s3-bucket/${fileName}/${fileName}.mpd`,
+            output: `/tmp/winggo-vod/${fileName}/manifest.mpd`,
             vids: getVids(fileName, scales),
             maps: getMaps(scales),
             sets: getSets(scales)
