@@ -7,7 +7,7 @@ const exec = util.promisify(require('child_process').exec)
 const AWS_BIN = shell.which('aws');
 
 const SYNC_BASE = AWS_BIN + `\
- s3 sync /tmp/winggo-vod s3://winggo-test-bucket `
+ s3 sync /tmp/winggo-vod s3://winggo-test-bucket`
 
 
 export const syncS3 = async () => {
